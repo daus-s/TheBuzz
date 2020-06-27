@@ -1,0 +1,15 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Confirmation</title>
+</head>
+<body>
+<h1>Thank you!</h1>
+    <p>We sent an email to you to confirm your email address, click the link in the email to verify your account.</p>
+    <p th:text="'firstName: ' + ${account.firstName}" />
+    <p th:text="'lastName: ' + ${account.lastName}" />
+    <p th:text="'email: ' + ${account.email}" />
+    <a href="/">Go Home</a>
+</body>
+</html>
