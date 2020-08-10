@@ -1,6 +1,9 @@
 package com.buzz.util;
 
+import com.buzz.model.Account;
 import com.buzz.model.Email;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -9,24 +12,30 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Properties;
 
+@Component
 public class EmailSender
 {
+    @Value("${EMAIL_SERVER_HOST}")
+    String emailServerHost;
+
+    @Value("${EMAIL_USERNAME}")
+    String username;
+
+    @Value("${EMAIL_PASSWORD}")
+    String pwd;
+
+
     /*Email:
      * send an email to the to address routed through the company SES called->(ese)
      * from the single "thebuzzemail" account with content determined on what the
      * message is, current messages include, email verification, forgot your password
      * */
-    public static void send(Email email) {
+    public void send(Email email, Account a) {
         String file_s = "";
         //TODO: change to html file
-        try
-        {
-            file_s = TextUtility.readFileAsString(email.getContentName());
-        }
-        catch (IOException io)
-        {
-            System.out.println(io);
-        }
+
+        file_s = new EmailUtility().generateContent(a, email.getContentName());
+
 
         Address address = new InternetAddress();
         try
@@ -41,9 +50,10 @@ public class EmailSender
 
         Properties props = new Properties();
         //TODO: make this for the SES(the ese)
-        props.put("mail.smtp.host", "smtp.cgrmtn-carmichaels.com"); // the ese when it is setup
-        props.put("mail.smtp.port", "465");
-        props.put("mail.user", "toddalt1@cgrmtn-carmichaels.com");
+        props.put("mail.smtp.host", emailServerHost); // the ese when it is setup
+        props.put("mail.smtp.port", "587");
+        props.put("mail.user", username);
+        System.out.println(pwd);
         Session session = Session.getInstance(props, null);
 
         try
@@ -59,7 +69,7 @@ public class EmailSender
 
             //this will be the ese login
             //TODO: hide this when pushing code to github/servers
-            Transport.send(msg, "", "");
+            Transport.send(msg, username, pwd);
         }
         catch (MessagingException mex)
         {

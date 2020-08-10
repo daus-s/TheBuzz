@@ -1,23 +1,30 @@
 package com.buzz.util;
 
+import com.buzz.model.Group;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class TextUtility
 {
     public static String readFileAsString(String filePath) throws IOException
     {
         StringBuffer fileData = new StringBuffer();
-        BufferedReader reader = new BufferedReader(
-                new FileReader(filePath));
+        BufferedReader reader = new BufferedReader(new FileReader(filePath));
+
         char[] buf = new char[1024];
-        int numRead=0;
-        while((numRead=reader.read(buf)) != -1){
+        int numRead=reader.read(buf);
+
+        while(numRead != -1)
+        {
             String readData = String.valueOf(buf, 0, numRead);
             fileData.append(readData);
+            numRead=reader.read(buf);
         }
         reader.close();
         return fileData.toString();
     }
+
 }

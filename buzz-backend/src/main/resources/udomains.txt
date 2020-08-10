@@ -1,0 +1,8 @@
+chapman.edu
+uw.edu
+gonzaga.edu
+wsu.edu
+cwu.edu
+wwu.edu
+ewu.edu
+

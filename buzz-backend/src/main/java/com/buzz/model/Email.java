@@ -9,7 +9,7 @@ package com.buzz.model;
  *      contentName: path that is used to find the correct
  *                   resource that is used in the email
  *
- * Usage: this is created when an email request is made and isgiven its content based on the context in which it is called
+ * Usage: this is created when an email request is made and is given its content based on the context in which it is called
  *        it is then passed as an argument to the email method, from where it will be sent
 * */
 public class Email
@@ -51,7 +51,7 @@ public class Email
     }
 
 
-    /*Constructors, 2 exist
+    /*Constructors, 1 exist
     * one with only the to address and the other
     * with the to address as well as the file content
     * to be sent in the email. in generate message, a UUID
