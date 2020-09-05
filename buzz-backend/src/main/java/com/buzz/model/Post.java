@@ -4,6 +4,7 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 public class Post implements RowDDB
 {
@@ -50,6 +51,14 @@ public class Post implements RowDDB
      * */
     private boolean privacy = true;
 
+    /**
+     * id of the post generated and used to ensure that in a single feed posts are not repeated
+     * generated form a UUID and assigned to the post at creation, also enforces that posts are
+     * reconstructed when posted again
+     */
+    private String id;
+
+
 
     public String getImageLocation()
     {
@@ -87,12 +96,22 @@ public class Post implements RowDDB
         this.privacy = privacy;
     }
 
+    public String getId()
+    {
+        return id;
+    }
+    public void setId(String id)
+    {
+        this.id = id;
+    }
+
     public Post(String imageLocation, Group publisher)
     {
         this.date = new Date();
         this.imageLocation = imageLocation;
         this.publisher = publisher.getDisplayName();
-        caption = "";
+        this.caption = "";
+        this.id = UUID.randomUUID().toString();
     }
 
     public Post(String imageLocation, String caption, Group publisher)
@@ -101,6 +120,7 @@ public class Post implements RowDDB
         this.imageLocation = imageLocation;
         this.publisher = publisher.getDisplayName();
         this.caption = caption;
+        this.id = UUID.randomUUID().toString();
     }
 
 
@@ -142,4 +162,6 @@ public class Post implements RowDDB
     {
         return this.imageLocation;
     }
+
+
 }

@@ -27,4 +27,16 @@ public class TextUtility
         return fileData.toString();
     }
 
+
+    public static String removeSpaces(String given)
+    {
+        String replace = "";
+
+        for (int i = 0; i < given.length(); i++)
+        {
+            if (given.charAt(i)==' ')
+                given = given.substring(0,i) + "-" + given.substring(i+1);
+        }
+        return given;
+    }
 }

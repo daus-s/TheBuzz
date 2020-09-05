@@ -215,8 +215,10 @@ public class Account extends Item implements RowDDB
 
     public Account()
     {
-        this.firstName = "fName";
-        this.lastName  = "lName";
+        this.firstName = "default-first-name";
+        this.lastName  = "default-last-name";
+        this.ttl = Integer.MAX_VALUE;
+        this.verifyCode = "pre-assigned";
         this.email = "default@thebuzz.com";
         this.verifyCode = this.createVerifyCode();
     }
@@ -252,7 +254,7 @@ public class Account extends Item implements RowDDB
      */
     public String toString()
     {
-        return "firstName:" + this.firstName + "\nlastName:" + this.lastName + "\nemail:" + this.email + "\nverified:" + this.verified + "\nstudent:" + this.student + "\nfollowingIDs:" + followingIDs.toString() + "\ncurrentSchoolID:" + this.currentSchoolID;
+        return "firstName:" + this.firstName + "\nlastName:" + this.lastName + "\nemail:" + this.email + "\nverified:" + this.verified + "\nstudent:" + this.student + "\nfollowingIDs:" + followingIDs.toString() + "\ncurrentSchoolID:" + this.currentSchoolID + "\nhashedPWD:" + this.hashedPassword + "\nverification code:" + this.verifyCode + "\nttl:" + this.ttl;
     }
 
 
@@ -300,6 +302,7 @@ public class Account extends Item implements RowDDB
             this.setStudent(map.get("student").getS().contains("true"));
             this.setHashedPassword(map.get("hashedPassword").getS());
             this.setCurrentSchoolID(map.get("currentSchoolID").getS());
+            this.setTtl(Integer.parseInt(map.get("ttl").getN()));
         }
         else
         {
@@ -320,7 +323,9 @@ public class Account extends Item implements RowDDB
         itemValues.put("student", new AttributeValue(this.student+""));
         itemValues.put("followingIDs", new AttributeValue(this.followingIDs));
         itemValues.put("currentSchoolID", new AttributeValue(this.currentSchoolID));
-        itemValues.put("ttl", new AttributeValue(this.ttl + ""));
+        AttributeValue av = new AttributeValue();
+        av.setN(this.ttl+"");
+        itemValues.put("ttl", av);
 
         return itemValues;
     }

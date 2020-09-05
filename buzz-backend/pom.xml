@@ -19,6 +19,7 @@
 		<aws.java.sdk.version>2.13.7</aws.java.sdk.version>
 	</properties>
 
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -77,6 +78,8 @@
 			<artifactId>jbcrypt</artifactId>
 			<version>0.4</version>
 		</dependency>
+
+
 
 	</dependencies>
 

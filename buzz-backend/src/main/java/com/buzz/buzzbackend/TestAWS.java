@@ -16,7 +16,7 @@ public class TestAWS
         Account account = new Account("f","l", "test@uw.edu");
         DynamoDBUtility.put(account);
 
-        Account a = new Account("","","test@uw.edu");
+        Account a = new Account("--","--","test@uw.edu");
         DynamoDBUtility.get(a);
         System.out.println(a);
 

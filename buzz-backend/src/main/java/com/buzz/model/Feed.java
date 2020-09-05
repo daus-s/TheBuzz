@@ -1,8 +1,14 @@
 package com.buzz.model;
 
-import java.util.ArrayList;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.xspec.B;
+import com.buzz.util.DynamoDBUtility;
 
-public class Feed
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Map;
+
+public class Feed implements RowDDB
 {
     private ArrayList<Post> feed = new ArrayList<Post>();
 
@@ -18,6 +24,7 @@ public class Feed
     {
         this.account = account;
     }
+
     public University getUniversity()
     {
         return university;
@@ -30,6 +37,9 @@ public class Feed
     public Feed(Account account)
     {
         this.account = account;
+        University u = new University("", "", account.getCurrentSchoolID());
+        DynamoDBUtility.get(u);
+        this.university = u;
     }
 
 
@@ -39,33 +49,96 @@ public class Feed
         if (university!=null)
         {
             ArrayList<Club> clubs = university.getClubs();
-            for (int i = 0; i < clubs.size(); i++)
+            for (Club club : clubs)
             {
-                ArrayList<Post> clubsPost = clubs.get(i).getPosts();
-                for (int j = 0; j < clubsPost.size(); j++)
-                {
-                    feed.add(clubsPost.get(j));
-                }
+                ArrayList<Post> clubsPost = club.getPosts();
+                feed.addAll(clubsPost);
             }
         }
         //following
 
-        ArrayList<String> following = account.getFollowingIDs();
-//        for (int i = 0; i < following.size(); i++)
-//        {
-//            if (!following.get(i).equals(this.university))
-//            {
-//                ArrayList<Post> groupPosts = following.get(i).getPosts();
-//                for (int j = 0; j < groupPosts.size(); j++)
-//                {
-//                    feed.add(groupPosts.get(j));
-//                }
-//
-//            }
-//        }
+        ArrayList<String> followingIDs = account.getFollowingIDs();
+        ArrayList<Group> following = new ArrayList<>();
+
+
+        for (String id: followingIDs)
+        {
+
+            GroupFactory instance = new GroupFactory();
+            if (instance.getType()=='u')
+            {
+                University u = new University("", "", "");
+                DynamoDBUtility.get(u);
+                following.add(u);
+            }
+            if (instance.getType()=='c')
+            {
+                Club c = new Club("", "");
+                DynamoDBUtility.get(c);
+                following.add(c);
+            }
+            if (instance.getType()=='b')
+            {
+                Business b = new Business("", "", "");
+                DynamoDBUtility.get(b);
+                following.add(b);
+            }
+        }
+
+
+        for (int i = 0; i < following.size(); i++)
+        {
+            if (!following.get(i).equals(this.university))
+            {
+                ArrayList<Post> groupPosts = following.get(i).getPosts();
+                for (int j = 0; j < groupPosts.size(); j++)
+                {
+                    feed.add(groupPosts.get(j));
+                }
+
+            }
+        }
 
         //promoted
 
+        for (Business b : university.getBusinesses())
+        {
+            for (Post p: b.getPosts())
+            {
+                feed.add(p);
+            }
+        }
+
         return feed;
+    }
+
+    @Override
+    public String getTableName()
+    {
+        return "feed-table";
+    }
+
+    @Override
+    public void loadModel(Map<String, AttributeValue> map)
+    {
+
+    }
+
+    @Override
+    public Map<String, AttributeValue> getModelAttributes()
+    {
+        return null;
+    }
+
+    @Override
+    public String getKey()
+    {
+        return "account.email";
+    }
+
+    @Override
+    public String getKeyValue()
+    {
+        return this.account.getEmail();
     }
 }

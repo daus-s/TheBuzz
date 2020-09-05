@@ -41,31 +41,13 @@ public class DynamoDBUtility
         }
         return false;
     }
-    public static boolean deleteAccount(String tableName, String email)
-    {
-        HashMap<String,AttributeValue> key_to_get = new HashMap<String,AttributeValue>();
-
-        key_to_get.put("email", new AttributeValue(email));
-
-        try
-        {
-            dynamoDB.deleteItem(tableName, key_to_get);
-        }
-        catch (AmazonServiceException e)
-        {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-
-
 
     public static boolean put(RowDDB row)
     {
         Map<String,AttributeValue> item_values = row.getModelAttributes();
 
         //item_values.put();
+        System.out.println(item_values);
 
 
         try
@@ -82,17 +64,10 @@ public class DynamoDBUtility
         catch (AmazonServiceException e)
         {
             e.printStackTrace();
+            System.err.printf("problem discovered when putting \"%s\" into ddb\n", row.getKeyValue());
             return false;
         }
         return true;
     }
-
-
-
-
-
-
-
-
 
 }

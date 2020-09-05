@@ -2,6 +2,7 @@ package com.buzz.controllers;
 
 import com.buzz.model.Account;
 import com.buzz.model.Email;
+import com.buzz.model.University;
 import com.buzz.util.DynamoDBUtility;
 import com.buzz.util.EmailSender;
 import com.buzz.util.EmailUtility;
@@ -34,7 +35,10 @@ public class RegisterController
     @PostMapping("/register")
     public String registerSubmit(@ModelAttribute Account account)
     {
-
+        account.setCurrentSchoolID(account.getEmail().substring(account.getEmail().indexOf("@")));
+        University u = new University("","", account.getCurrentSchoolID());
+        DynamoDBUtility.get(u);
+        account.follow(u);
         account.setHashedPassword(BCrypt.hashpw(account.getHashedPassword(), BCrypt.gensalt()));
         System.out.println(account);
         DynamoDBUtility.put(account);
