@@ -47,7 +47,7 @@ public class DynamoDBUtility
         Map<String,AttributeValue> item_values = row.getModelAttributes();
 
         //item_values.put();
-        System.out.println(item_values);
+        //System.out.println(item_values);
 
 
         try

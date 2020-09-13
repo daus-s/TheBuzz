@@ -1,14 +1,14 @@
 <!DOCTYPE HTML>
 <html xmlns:th="https://www.thymeleaf.org">
 <head>
-    <title>Register your Account</title>
+    <title>Login</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-<h1>Create Account</h1>
-<form action="#" th:action="@{/register}" th:object="${account}" method="post">
-    <p>Email: <input type="text" th:field="*{email}" /></p>
-    <p>Password: <input type = "password" th:field="*{hashedPassword}" /></p>
+<h1>Login</h1>
+<form action="#" th:action="@{/login}" th:object="${cred}" method="post">
+    <p>Username: <input type="text" th:field="*{username}" /></p>
+    <p>Password: <input type = "password" th:field="*{password}" /></p>
     <p><input type="submit" value="Login" /></p>
 </form>
 </body>

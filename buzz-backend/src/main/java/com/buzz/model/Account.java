@@ -15,20 +15,20 @@ public class Account extends Item implements RowDDB
      * features require at the time. this field is required for the account creation
      * and does not need to be unique
      */
-    private String firstName;                                           //required
+    protected String firstName;                                           //required
 
     /**
      * last name, should be legal but no verification of this. also does not need to be unique.
      * required by the constructor to create account
      */
-    private String lastName;                                            //required
+    protected String lastName;                                            //required
 
     /**
      * email, used as key in the account database. MUST be unique and is
      * required in the constructor as well. the domain is used to check
      * student status
      */
-    private String email;                                               //required
+    protected String email;                                               //required
 
     /**
      * stored using B-crypt and is passed in through the /register page
@@ -36,14 +36,14 @@ public class Account extends Item implements RowDDB
      *
      * requirements, 8+ chars
      */
-    private String hashedPassword;                                      //required
+    protected String hashedPassword;                                      //required
 
     /**
      * verfied; determines if the account can perform actions at all\
      * verfied is the value of whether the account has a valid email and
      * has responded to and clicked the link to confirm the email is correct
      */
-    private boolean verified = false;                                   //non constructor
+    protected boolean verified = false;                                   //non constructor
 
     /**
      * boolean variable whether the student belongs to a university or not
@@ -53,7 +53,7 @@ public class Account extends Item implements RowDDB
      *      they could, however, they would be unable to perform any actions due to the
      *      verified boolean being false. which can only be set with access to the email
      */
-    private boolean student = false;                                    //generate in constructor
+    protected boolean student = false;                                    //generate in constructor
 
 
     /**
@@ -62,19 +62,19 @@ public class Account extends Item implements RowDDB
      *
      * 6 digit code generated
      */
-    private String verifyCode;
+    protected String verifyCode;
 
     /**
      *  all the groups that the
      */
-    private ArrayList<String> followingIDs = new ArrayList<String>();   //non constructor
+    protected ArrayList<String> followingIDs = new ArrayList<String>();   //non constructor
 
 
     /**
      * the domain(unique field) of the school the student(account currently attends)
      * used to generate the feed
      */
-    private String currentSchoolID;                                //generate in constructor
+    protected String currentSchoolID;                                //generate in constructor
 
     /**
      * determines the time for when the account should be deleted from the database
@@ -82,7 +82,7 @@ public class Account extends Item implements RowDDB
      * after verification, this value is 5 years
      * value adds a year every login when the time remaining is less than a year
      */
-    private int ttl;                                                    //constant-86400s -24 hrs
+    protected int ttl;                                                    //constant-86400s -24 hrs
 
     //email
     public String getEmail()
@@ -243,6 +243,7 @@ public class Account extends Item implements RowDDB
     {
         if (!followingIDs.contains(f.getEmail()))
         {
+            f.addFollower(this);
             followingIDs.add(f.getEmail());
             return true;
         }
@@ -303,6 +304,7 @@ public class Account extends Item implements RowDDB
             this.setHashedPassword(map.get("hashedPassword").getS());
             this.setCurrentSchoolID(map.get("currentSchoolID").getS());
             this.setTtl(Integer.parseInt(map.get("ttl").getN()));
+            this.setVerifyCode(map.get("verifyCode").getS());
         }
         else
         {
@@ -323,6 +325,7 @@ public class Account extends Item implements RowDDB
         itemValues.put("student", new AttributeValue(this.student+""));
         itemValues.put("followingIDs", new AttributeValue(this.followingIDs));
         itemValues.put("currentSchoolID", new AttributeValue(this.currentSchoolID));
+        itemValues.put("verifyCode", new AttributeValue(this.verifyCode));
         AttributeValue av = new AttributeValue();
         av.setN(this.ttl+"");
         itemValues.put("ttl", av);

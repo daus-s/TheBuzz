@@ -152,19 +152,14 @@ import java.util.Map;
         //utility methods
 
         /**
-         * @param email
+         * @param a
          * @return returns whether the operation was successful or not(true-success, false-fail)
          * The method checks to see if the account is already following and then adds to the list.
          * Once an account follows, it will add to the accounts following.
          */
-        public boolean addFollower(String email)
+        public boolean addFollower(Account a)
         {
-            if (!followers.contains(email))
-            {
-                followers.add(email);
-                return true;
-            }
-            return false;
+            return followers.add(a.getEmail());
         }
 
         /**
@@ -174,7 +169,7 @@ import java.util.Map;
          */
         public boolean removeFollower(Account r)
         {
-            return followers.remove(r);
+            return followers.remove(r.getEmail());
         }
 
         /**

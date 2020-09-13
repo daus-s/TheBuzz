@@ -6,12 +6,58 @@
 </head>
 <body>
 <h1>Create Account</h1>
-<form action="#" th:action="@{/register}" th:object="${account}" method="post">
-    <p>First Name: <input type="text" th:field="*{firstName}" /></p>
-    <p>Last Name: <input type="text" th:field="*{lastName}" /></p>
-    <p>Email: <input type="text" th:field="*{email}" /></p>
-    <p>Password: <input type = "password" th:field="*{hashedPassword}" /></p>
-    <p><input type="submit" value="Submit" /></p>
+<form name = "accountregister" form action="#" th:action="@{/register}" th:object="${account}" method="post">
+    <br>
+    First Name: <input type="text" th:field="*{firstName}" />
+    <br>
+
+    <br>
+    Last Name: <input type="text" th:field="*{lastName}" />
+    <br>
+
+    <br>
+    Email: <input type="text" th:field="*{email}" />
+    <br>
+
+    <br>
+    Password: <input type = "password" th:field="*{hashedPassword}" id="pwd1" name="pwd1"/> <span id='valid'></span>
+    <br>
+
+    <br>
+    Confirm Password: <input type="password" th:field="*{confirmHashedPwd}" id="pwd2"name="pwd2" onkeyup="check();"> <span id='equal'></span>
+    <br>
+
+    <input type="submit" id="submit" value="Submit"/>
+
+    <script>
+    var check = function()
+    {
+        if (document.getElementById('pwd1').value == document.getElementById('pwd2').value)
+        {
+            document.getElementById('equal').style.color = 'green';
+            document.getElementById('equal').innerHTML = 'matching';
+            document.getElementById('submit').disabled = false;
+        }
+        else
+        {
+            document.getElementById('equal').style.color = 'red';
+            document.getElementById('equal').innerHTML = 'not matching';
+            document.getElementById('submit').disabled = true;
+
+        }
+
+        if (document.getElementById('pwd1').value.length < 8)
+        {
+            document.getElementById('valid').style.color = 'red';
+            document.getElementById('valid').innerHTML = 'not valid';
+        }
+        else
+        {
+            document.getElementById('valid').style.color = 'green';
+            document.getElementById('valid').innerHTML = 'valid';
+        }
+    }
+    </script>
 
 </form>
 </body>

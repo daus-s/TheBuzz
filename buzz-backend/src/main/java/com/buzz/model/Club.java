@@ -111,6 +111,15 @@ public class Club extends GroupFactory implements Group, RowDDB
         this.logoIML = i;
     }
 
+    public boolean addFollower(Account a)
+    {
+        return followers.add(a.getEmail());
+    }
+    public boolean removeFollower(Account a)
+    {
+        return followers.remove(a.getEmail());
+    }
+
     public University getAffiliation()
     {
         return affiliation;

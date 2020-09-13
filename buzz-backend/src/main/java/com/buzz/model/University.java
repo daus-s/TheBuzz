@@ -95,7 +95,7 @@ public class University extends GroupFactory implements RowDDB, Group
         if (r.getEmail().contains(domain))
             return false;
         else
-            return this.removeFollower(r);
+            return followers.remove(r.getEmail());
     }
 
     public String getDomain()
@@ -290,6 +290,12 @@ public class University extends GroupFactory implements RowDDB, Group
         this.logoIML = i;
     }
 
+    @Override
+    public boolean addFollower(Account a)
+    {
+        return followers.add(a.getEmail());
+    }
+
 
     public ArrayList<Business> getBusinesses()
     {
@@ -302,5 +308,10 @@ public class University extends GroupFactory implements RowDDB, Group
     public void setBusinesses(ArrayList<Business> businesses)
     {
         this.businesses = businesses;
+    }
+
+    public String toString()
+    {
+        return "domain: " + domain + "\ndisplayName: " + displayName + "\nemail: " + email + "followers: " + followers.toString() + "\nposts: " + posts.toString() + "\nwebsite: " + website + "\nlogoIML:" + logoIML;
     }
 }

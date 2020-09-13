@@ -5,7 +5,9 @@
     <title>Verify Email</title>
 </head>
 <body>
-    <p>Code: <input type="text" th:field="*{verifyCode}" /></p>
+<form action="#" th:action="@{/verify}" th:object="${verify}" method="post">
+    <p>Code: <input type="text" th:field="*{string}"/></p>
     <p><input type="submit" value="Submit" /></p>
+</form>
 </body>
 </html>

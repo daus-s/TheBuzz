@@ -22,5 +22,8 @@ public interface Group
     public String getLogoIML();
     public void setLogoIML(String i);
 
+    public boolean addFollower(Account a);
+    public boolean removeFollower(Account a);
+
 
 }
