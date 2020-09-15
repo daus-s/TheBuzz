@@ -20,14 +20,14 @@
     <br>
 
     <br>
-    Password: <input type = "password" th:field="*{hashedPassword}" id="pwd1" name="pwd1"/> <span id='valid'></span>
+    Password: <input type = "password" th:field="*{hashedPassword}" id="pwd1" name="pwd1" onkeyup="check();"/> <span id='valid'></span>
     <br>
 
     <br>
     Confirm Password: <input type="password" th:field="*{confirmHashedPwd}" id="pwd2"name="pwd2" onkeyup="check();"> <span id='equal'></span>
     <br>
 
-    <input type="submit" id="submit" value="Submit"/>
+    <input type="submit" id="submit" value="Submit" disabled="true"/>
 
     <script>
     var check = function()
@@ -50,11 +50,14 @@
         {
             document.getElementById('valid').style.color = 'red';
             document.getElementById('valid').innerHTML = 'not valid';
+            document.getElementById('submit').disabled = true;
         }
         else
         {
             document.getElementById('valid').style.color = 'green';
             document.getElementById('valid').innerHTML = 'valid';
+            document.getElementById('submit').disabled = false;
+
         }
     }
     </script>
