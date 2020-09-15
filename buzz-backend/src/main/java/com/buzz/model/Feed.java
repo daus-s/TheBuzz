@@ -40,6 +40,7 @@ public class Feed implements RowDDB
         University u = new University("", "", account.getCurrentSchoolID());
         DynamoDBUtility.get(u);
         this.university = u;
+        this.feed = generateFeed();
     }
 
 

@@ -1,10 +1,50 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
         "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <title>$Title$</title>
+    <title>Create Group</title>
 </head>
 <body>
-$END$
+<form>
+    <input type="radio" id="uni" name="type" value="uni">
+    <label for="uni">University</label><br>
+    <input type="radio" id="business" name="type" value="business">
+    <label for="business">Business</label><br>
+    <input type="radio" id="club" name="type" value="club">
+    <label for="club">Club/RSO</label>
+    <br>
+
+    <a id="url" href="" target="_blank" onclick="radioCheck();">Continue</a>
+</form>
+
+<script>
+function radioCheck()
+{
+    var radio = document.getElementByName("type");
+
+    for (var i = 0, length = radios.length; i < length; i++) {
+        if (radio[i].checked)
+        {
+            if (radio[i].value=="uni")
+            {
+                document.getElementById("url").href = "/creategroup/university";
+                break;
+            }
+            if (radio[i].value=="business")
+            {
+                document.getElementById("url").href = "/creategroup/business";
+                break;
+            }
+            if (radio[i].value=="club")
+            {
+                document.getElementById("url").href = "/creategroup/club";
+                break;
+            }
+            // only one radio can be logically checked, don't check the rest
+
+        }
+    }
+}
+</script>
 </body>
 </html>
