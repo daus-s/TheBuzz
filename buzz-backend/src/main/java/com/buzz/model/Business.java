@@ -68,6 +68,17 @@ import java.util.Map;
          */
         private int ttl;
 
+        private String hashedPwd1;
+        private String hashedPwd2;
+
+
+        /**
+         *
+         */
+        private String phoneNumber;
+
+
+
 
         //follower & post accessors
         public ArrayList<String> getFollowers()
@@ -148,6 +159,7 @@ import java.util.Map;
         {
             this.ttl = ttl;
         }
+
 
         //utility methods
 
@@ -266,5 +278,33 @@ import java.util.Map;
         }
 
 
+        public String getPhoneNumber()
+        {
+            return phoneNumber;
+        }
 
+        public void setPhoneNumber(String phoneNumber)
+        {
+            this.phoneNumber = phoneNumber;
+        }
+
+        public String getHashedPwd2()
+        {
+            return hashedPwd2;
+        }
+
+        public void setHashedPwd2(String hashedPwd2)
+        {
+            this.hashedPwd2 = hashedPwd2;
+        }
+
+        public String getHashedPwd1()
+        {
+            return hashedPwd1;
+        }
+
+        public void setHashedPwd1(String hashedPwd1)
+        {
+            this.hashedPwd1 = hashedPwd1;
+        }
     }

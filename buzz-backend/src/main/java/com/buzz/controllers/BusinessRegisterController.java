@@ -1,0 +1,8 @@
+package com.buzz.controllers;
+
+import org.springframework.stereotype.Controller;
+
+@Controller
+public class BusinessRegisterController
+{
+}
