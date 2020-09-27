@@ -68,7 +68,13 @@ import java.util.Map;
          */
         private int ttl;
 
+        /**
+         *
+         */
         private String hashedPwd1;
+        /**
+         *
+         */
         private String hashedPwd2;
 
 

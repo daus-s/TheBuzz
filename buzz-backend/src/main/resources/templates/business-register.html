@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Register your Account</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<h1>Register Business</h1>
+<form name = "bussiness-register" form action="#" th:action="@{/creategroup/business}" th:object="${business}" method="post">
+    <br>
+    Business Name: <input type="text" th:field="*{displayName}" />
+    <br>
+
+    <br>
+    Website: <input type="text" th:field="*{website}" />
+    <br>
+
+    <br>
+    Email: <input type="text" th:field="*{email}" />
+    <br>
+
+    <br>
+    Address: <input type="text" th:field="*{address}" />
+    <br>
+
+    <label for="browser">Choose best the University to advertise to(recommended nearest):</label>
+      <input list="unis" name="uni" id="listU">
+      <datalist id="listU">
+        <option value="Edge">
+        <option value="Firefox">
+        <option value="Chrome">
+        <option value="Opera">
+        <option value="Safari">
+      </datalist>
+
+    <br>
+    Password: <input type = "password" th:field="*{hashedPassword}" id="pwd1" name="pwd1" onkeyup="check();"/> <span id='valid'></span>
+    <br>
+
+    <br>
+    Confirm Password: <input type="password" th:field="*{confirmHashedPwd}" id="pwd2"name="pwd2" onkeyup="check();"> <span id='equal'></span>
+    <br>
+
+    <input type="submit" id="submit" value="Submit" disabled="true"/>
+
+    <script>
+    var check = function()
+    {
+        if (document.getElementById('pwd1').value == document.getElementById('pwd2').value)
+        {
+            document.getElementById('equal').style.color = 'green';
+            document.getElementById('equal').innerHTML = 'matching';
+            document.getElementById('submit').disabled = false;
+        }
+        else
+        {
+            document.getElementById('equal').style.color = 'red';
+            document.getElementById('equal').innerHTML = 'not matching';
+            document.getElementById('submit').disabled = true;
+
+        }
+
+        if (document.getElementById('pwd1').value.length < 8)
+        {
+            document.getElementById('valid').style.color = 'red';
+            document.getElementById('valid').innerHTML = 'not valid';
+            document.getElementById('submit').disabled = true;
+        }
+        else
+        {
+            document.getElementById('valid').style.color = 'green';
+            document.getElementById('valid').innerHTML = 'valid';
+            document.getElementById('submit').disabled = false;
+
+        }
+    }
+    </script>
+
+</form>
+</body>
+</html>
