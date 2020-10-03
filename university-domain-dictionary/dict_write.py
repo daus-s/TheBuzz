@@ -3,43 +3,64 @@
 CONST_FILENAME = "university-domain.csv"
 
 def find(uni):
+    '''
+    returns a tuple of (bool, string, string) that lists the attributes of the specified dictionary entry
+    uses file open in read only mode and then subsequently processes through the string from ${CONST_FILENAME}
+    to return the domain.
+    '''
     f = open(CONST_FILENAME, "r")
     string = f.read()
     i = string.find(uni)
     domain = ""
     sdo = False #start domain
     while string[i]!=']':
-        if string[i]==':':
-            sdo=True
         if sdo:
             domain += str(string[i])
+        if string[i]==':':
+            sdo=True
         i += 1
     #tuple (exists, uni, domain) -> types: (bool, str, str)
     t = (i!=-1, uni, domain)
     return t
 
 def remove(uni, domain):
+    '''
+    not return value. removes the specified university/domain entry. requires open the file twice, slightly less efficeint than
+    the other methods. removes following comma too from the .csv file
+    '''
     f = open(CONST_FILENAME, "r")
     str = f.read()
     str = str.replace(concatonate(uni, domain) + ",", "")
-    print(str)
     f.close()
     f = open(CONST_FILENAME, "w")
     f.write(str)
     f.close()
 
 def append(uni, domain):
+    '''
+    writes the new entry in format \"[University Name,domain.edu]\"
+    '''
     write_to_file(concatonate(uni, domain))
 
 def illegal_character(str):
+    '''
+    checks if the str contains any illegal characters for this format. this ensures that no processing error can happen when
+    the program examines it.
+    '''
     return ("[" in str or ":" in str or "]" in str)
 
 
 def concatonate(name, defi):
+    '''
+    returns a string in the specified format for the application \"[string1,string2]\"
+    '''
     #for a specific format in the university-domain.csv
     return "[" + name + ":" + defi + "]"
 
 def write_to_file(entry):
+    '''
+    opens and appends a string object to the ${CONST_FILENAME} with a comma attached to match .csv convention
+    '''
     f = open(CONST_FILENAME, "a")
     f.write(entry)
     f.write(",")
@@ -47,14 +68,19 @@ def write_to_file(entry):
 
 
 def main(args):
+    '''
+    program taking in university name and domain to add to ${CONST_FILENAME} for processing in the backend of the buzz
+    program for student status checking (SSC), and registering groups.
+    '''
     resume = True
+    domain = "";
+    uni = "";
+    mode = "";
     while (resume==True):
         mode = input("enter mode(ap->append, rm->remove, se->find): ")
-        #print("\n")
         uni = input("enter university name: ")
-        #print("\n")
-        domain = input("enter university domain: ")
-        #print("\n")
+        if mode !="se":
+            domain = input("enter university domain: ")
         if illegal_character(uni) or illegal_character(domain):
             print("illegal character found. not performing actions to file")
         else:
