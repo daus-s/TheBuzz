@@ -1,3 +1,6 @@
+
+
+
 function setCookie(cname, cvalue, exdays)
 {
       var d = new Date();
@@ -34,13 +37,36 @@ function printFeed(JSON)
 
 function validPassword()
 {
-    pwd1 = document.accountregister.pwd1;
-    pwd2 = document.accountregister.pwd2;
+    var check = function()
+        {
+            if (document.getElementById('pwd1').value == document.getElementById('pwd2').value)
+            {
+                document.getElementById('equal').style.color = 'green';
+                document.getElementById('equal').innerHTML = 'matching';
+                document.getElementById('submit').disabled = false;
+            }
+            else
+            {
+                document.getElementById('equal').style.color = 'red';
+                document.getElementById('equal').innerHTML = 'not matching';
+                document.getElementById('submit').disabled = true;
 
-    if (pwd1 != pwd2)
-    {
-        return
-    }
+            }
+
+            if (document.getElementById('pwd1').value.length < 8)
+            {
+                document.getElementById('valid').style.color = 'red';
+                document.getElementById('valid').innerHTML = 'not valid';
+                document.getElementById('submit').disabled = true;
+            }
+            else
+            {
+                document.getElementById('valid').style.color = 'green';
+                document.getElementById('valid').innerHTML = 'valid';
+                document.getElementById('submit').disabled = false;
+
+            }
+        }
 }
 
 function checkLogIn()
@@ -74,4 +100,9 @@ function radioCheck()
 
         }
     }
+}
+
+function universityDataList()
+{
+    
 }

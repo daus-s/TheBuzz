@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-CONST_FILENAME = "university-domain.json"
+CONST_FILENAME = "university-domain.csv"
 
 def find(uni):
     '''
@@ -11,34 +11,26 @@ def find(uni):
     f = open(CONST_FILENAME, "r")
     string = f.read()
     i = string.find(uni)
-    if i==-1:
-        return (False, uni, "")
     domain = ""
     sdo = False #start domain
-    while string[i]!='\"' and not sdo:
+    while string[i]!=']':
         if sdo:
             domain += str(string[i])
-        if string[i]==',':
-            i+=10
+        if string[i]==':':
             sdo=True
         i += 1
     #tuple (exists, uni, domain) -> types: (bool, str, str)
-    t = (True, uni, domain)
+    t = (i!=-1, uni, domain)
     return t
 
 def remove(uni, domain):
     '''
     not return value. removes the specified university/domain entry. requires open the file twice, slightly less efficeint than
-    the other methods. removes following comma too from the .json file
+    the other methods. removes following comma too from the .csv file
     '''
     f = open(CONST_FILENAME, "r")
     str = f.read()
-    entry = concatonate(uni, domain)
-    entry = entry[1:len(entry)]
-    print(entry)
-    print(str.find(entry))
-    str = str.replace(entry + ",", "")
-    print(str)
+    str = str.replace(concatonate(uni, domain) + ",", "")
     f.close()
     f = open(CONST_FILENAME, "w")
     f.write(str)
@@ -55,30 +47,23 @@ def illegal_character(str):
     checks if the str contains any illegal characters for this format. this ensures that no processing error can happen when
     the program examines it.
     '''
-    return ("[" in str or ":" in str or "]" in str or "\"" in str or "," in str or "{" in str or "}" in str)
+    return ("[" in str or ":" in str or "]" in str)
 
 
 def concatonate(name, defi):
     '''
-    returns a string in the specified format for json \",{\"name\":\"University of Washington\",\"domain\":\"uw.edu\"}\"
+    returns a string in the specified format for the application \"[string1,string2]\"
     '''
-    #for a specific format in the university-domain.json
-    return ",{\"name\":\"" + name + "\",\"domain\":\"" + defi + "\"}\n"
+    #for a specific format in the university-domain.csv
+    return "[" + name + ":" + defi + "]"
 
 def write_to_file(entry):
     '''
     opens and appends a string object to the ${CONST_FILENAME} with a comma attached to match .csv convention
     '''
-    f = open(CONST_FILENAME, "r")
-    str = f.read()
-    str = str[0:len(str)-3]
-    f.close()
-    f = open(CONST_FILENAME, "w")
-    f.write(str)
-    f.close()
     f = open(CONST_FILENAME, "a")
     f.write(entry)
-    f.write("\n]}")
+    f.write(",")
     f.close()
 
 
@@ -102,10 +87,7 @@ def main(args):
             if mode=="se":
                 print(find(uni))
             if mode=="ap":
-                if not find(uni)[0]:
-                    append(uni, domain)
-                else:
-                    print("university already exists")
+                append(uni, domain)
             if mode=="rm":
                 remove(uni, domain)
         resume = (input("continue? (y/n): ") == "y")
