@@ -194,7 +194,7 @@ public class Account extends Item implements RowDDB
 
         try
         {
-            String domains = TextUtility.readFileAsString("src/main/resources/udomains.txt");
+            String domains = TextUtility.readFileAsString("src/main/resources/static/university-domain.js");
             if (domains.contains(this.currentSchoolID))
             {
                 this.student = true;
@@ -209,7 +209,7 @@ public class Account extends Item implements RowDDB
         catch (IOException io)
         {
             io.printStackTrace();
-            System.out.println("IOException in file \"resources/udomains.txt\"");
+            System.out.println("IOException in file \"university-domains.js\"");
         }
     }
 
