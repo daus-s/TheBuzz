@@ -26,15 +26,14 @@ function getCookie(cname)
     return "";
 }
 
-function printFeed(JSON)
+function printFeed(listPost)
 {
-    //for each ... finish this up tommo with the printing the list of posts from database
+    listPost.forEach(toFeedObj);
 }
 
 
 function validPassword()
 {
-
     if (document.getElementById('pwd1').value == document.getElementById('pwd2').value)
     {
         document.getElementById('equal').style.color = 'green';
@@ -62,51 +61,58 @@ function validPassword()
         document.getElementById('submit').disabled = false;
 
     }
+
 }
 
-function checkLogIn()
+function checkLogIn(path)
 {
-
+    var c1 = getCookie("loginStatus");
+    if (c1=="logged-in")
+    {
+        document.location.href = path;
+    }
+    document.location.href = "/login";
 }
 
 function radioCheck()
 {
-    var radio = document.getElementByName("type");
-
-    for (var i = 0, length = radios.length; i < length; i++) {
-        if (radio[i].checked)
-        {
-            if (radio[i].value=="uni")
-            {
-                document.getElementById("url").href = "/creategroup/university";
-                break;
-            }
-            if (radio[i].value=="business")
-            {
-                document.getElementById("url").href = "/creategroup/business";
-                break;
-            }
-            if (radio[i].value=="club")
-            {
-                document.getElementById("url").href = "/creategroup/club";
-                break;
-            }
-            // only one radio can be logically checked, don't check the rest
-
-        }
+    if (document.getElementById('business').checked)
+    {
+        document.getElementById("url").href = "/creategroup/business";
     }
+    else if (document.getElementById('university').checked)
+    {
+        document.getElementById("url").href = "/creategroup/university";
+    }
+    else if (document.getElementById('club').checked)
+    {
+        document.getElementById("url").href = "/creategroup/club";
+    }
+    else
+    {
+        document.getElementById("url").href = "/creategroup";
+    }
+    return true;
 }
 
-function universityDataList()
+function universityDataList(obj)
 {
+    var list = obj.university_domain;
+
+    document.getElementById("listU").innerHTML = "";
+    list.forEach(makeDataListOption);
+
 
 }
 
-
-var uList =
+function makeDataListOption(str, index)
 {
-"university-domain":[
-{"name":"University of Washington","domain":"uw.edu"}
-,{"name":"Central Washington University","domain":"cwu.edu"}
-,{"name":"Chapman University","domain":"chapman.edu"}
-]}
+    document.getElementById("listU").innerHTML += "<option value=\"" + str.name + "\"><br>";
+}
+
+function toFeedObj(str, index)
+{
+    document.body.innerHTML += "<a href=page/"+ str.publisher + ">" + str.publisher + "</a><brr>";
+    document.body.innerHTML += "<img src=\"" + str.imageLocation + "\" alt=\"" + str.caption + "\"><br>";
+    document.body.innerHTML += str.caption + "<br>";
+}

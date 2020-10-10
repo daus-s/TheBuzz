@@ -163,5 +163,8 @@ public class Post implements RowDDB
         return this.imageLocation;
     }
 
-
+    public String toString()
+    {
+        return "{" + "publisher:" + this.publisher + "\nimageLocation:" + this.imageLocation + "\ncaption:" + this.caption + "}";
+    }
 }

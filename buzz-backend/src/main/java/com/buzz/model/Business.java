@@ -66,11 +66,6 @@ import java.util.Map;
         /**
          *
          */
-        private int ttl;
-
-        /**
-         *
-         */
         private String hashedPwd1;
         /**
          *
@@ -83,7 +78,10 @@ import java.util.Map;
          */
         private String phoneNumber;
 
-
+        /**
+         *
+         */
+        private ArrayList<String> universities;
 
 
         //follower & post accessors
@@ -154,16 +152,6 @@ import java.util.Map;
         public void setAddress(String address)
         {
             this.address = address;
-        }
-
-        //time to live accessors/mutators
-        public int getTtl()
-        {
-            return ttl;
-        }
-        public void setTtl(int ttl)
-        {
-            this.ttl = ttl;
         }
 
 
@@ -240,6 +228,8 @@ import java.util.Map;
         @Override
         public void loadModel(Map<String, AttributeValue> map)
         {
+            this.id = map.get("id").getS();
+            this.type = 'b';
             this.email = map.get("email").getS();
             this.displayName = map.get("displayName").getS();
             this.followers = (ArrayList<String>) map.get("followers").getSS();
@@ -253,6 +243,14 @@ import java.util.Map;
                     this.posts.add(p);
                 }
             }
+            this.website = map.get("website").getS();
+            this.logoIML = map.get("logoIML").getS();
+            this.hashedPwd1 = map.get("hashedPwd").getS();
+            this.hashedPwd2 = hashedPwd1;
+            this.universities = (ArrayList<String>) map.get("universities").getSS();
+            this.phoneNumber = map.get("phoneNumber").getS();
+            this.address = map.get("address").getS();
+
         }
 
         @Override
@@ -264,9 +262,14 @@ import java.util.Map;
             itemValues.put("email", new AttributeValue(this.email));
             itemValues.put("displayName", new AttributeValue(this.displayName));
             itemValues.put("followers", new AttributeValue(this.followers));
-            itemValues.put("posts", new AttributeValue());
+            itemValues.put("posts", new AttributeValue());//TODO: figure way to make string list
             itemValues.put("website", new AttributeValue(this.website));
             itemValues.put("logoIML", new AttributeValue(this.logoIML));
+            itemValues.put("hashedPwd", new AttributeValue(this.hashedPwd1));
+            itemValues.put("universities", new AttributeValue(this.universities));
+            itemValues.put("phoneNumber", new AttributeValue(this.phoneNumber));
+            itemValues.put("address", new AttributeValue(this.address));
+
 
             return itemValues;
         }
@@ -312,5 +315,15 @@ import java.util.Map;
         public void setHashedPwd1(String hashedPwd1)
         {
             this.hashedPwd1 = hashedPwd1;
+        }
+
+        public ArrayList<String> getUniversities()
+        {
+            return universities;
+        }
+
+        public void setUniversities(ArrayList<String> universities)
+        {
+            this.universities = universities;
         }
     }

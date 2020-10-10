@@ -3,28 +3,26 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <title>Create Group</title>
+    <script type = "text/javascript" src="webservices.js"></script>
+
 </head>
 <body>
-<form>
-    <input checked="" type="radio" name="slider" id="slide1">
-<input type="radio" name="slider" id="slide2">
-<input type="radio" name="slider" id="slide3">
-<input type="radio" name="slider" id="slide4">
-<input type="radio" name="slider" id="slide5">
-<input type="radio" name="slider" id="slide6">
+    <form>
+        <input type="radio" name="slider" id="business">
+        <label for="business">Business</label>
+        <br>
+        <input type="radio" name="slider" id="university">
+        <label for="university">University</label>
+        <br>
+        <input type="radio" name="slider" id="club">
+        <label for="club">Club</label>
+        <br>
 
-<a href="" onclick='myFunction()' id="myLink">MyLink</a>
+        <a href="/creategroup" onclick="radioCheck();" id="url">Continue</a>
 
 
 
-<script>
-    function myFunction() {
 
-        if(document.getElementById('slide1').checked) {
-            document.getElementById('myLink').href = "test.php";
-        }
-        
-    }
-</script>
+    </form>
 </body>
 </html>

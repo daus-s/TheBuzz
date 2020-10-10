@@ -47,12 +47,9 @@ public class RegisterController
     {
         String pwd = BCrypt.hashpw(account.getHashedPassword(), salt);
         Account written = new Account(account.getFirstName(), account.getLastName(), account.getEmail());
-        System.out.println(written);
 
         written.setHashedPassword(pwd);
-        System.out.println(written.getCurrentSchoolID());
         University u = new University("","", written.getCurrentSchoolID());
-        System.out.println(u);
         DynamoDBUtility.get(u);
         written.follow(u);
 

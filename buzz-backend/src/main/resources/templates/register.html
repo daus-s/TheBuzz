@@ -3,7 +3,7 @@
 <head>
     <title>Register your Account</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <script type = "text/javascript" src="webservices.js"></script>
+    <script type = "text/javascript" src="/webservices.js"></script>
 
 
 </head>
@@ -27,10 +27,10 @@
     <br>
 
     <br>
-    Confirm Password: <input type="password" th:field="*{confirmHashedPwd}" id="pwd2"name="pwd2" onkeyup="validPassword();"> <span id='equal'></span>
+    Confirm Password: <input type="password" th:field="*{confirmHashedPwd}" id="pwd2" name="pwd2" onkeyup="validPassword();"> <span id='equal'></span>
     <br>
 
-    <input type="submit" id="submit" value="Submit" disabled="true"/>
+    <input type="submit" id="submit" value="Submit" disabled="disabled"/>
 
 
 </form>
