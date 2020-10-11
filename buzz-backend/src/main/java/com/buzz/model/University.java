@@ -74,12 +74,19 @@ public class University extends GroupFactory implements RowDDB, Group
      */
     private ArrayList<Business> businesses = new ArrayList<>();
 
-
+    private String hashedPwd1;
+    private String hashedPwd2;
 
 
 
     public University(String displayName, String email, String domain)
     {
+        this.displayName = displayName;
+        this.email = email;
+        if (!email.contains(domain))
+        {
+            System.out.println(this.toString() + "\nprofile email does not contain the domain: cause for warning");
+        }
         this.domain = domain;
     }
 
@@ -313,5 +320,25 @@ public class University extends GroupFactory implements RowDDB, Group
     public String toString()
     {
         return "domain: " + domain + "\ndisplayName: " + displayName + "\nemail: " + email + "followers: " + followers.toString() + "\nposts: " + posts.toString() + "\nwebsite: " + website + "\nlogoIML:" + logoIML;
+    }
+
+    public String getHashedPwd1()
+    {
+        return hashedPwd1;
+    }
+
+    public void setHashedPwd1(String hashedPwd1)
+    {
+        this.hashedPwd1 = hashedPwd1;
+    }
+
+    public String getHashedPwd2()
+    {
+        return hashedPwd2;
+    }
+
+    public void setHashedPwd2(String hashedPwd2)
+    {
+        this.hashedPwd2 = hashedPwd2;
     }
 }

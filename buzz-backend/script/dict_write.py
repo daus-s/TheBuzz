@@ -88,9 +88,9 @@ def main(args):
     program for student status checking (SSC), and registering groups.
     '''
     resume = True
-    domain = "";
-    uni = "";
-    mode = "";
+    domain = ""
+    uni = ""
+    mode = ""
     while (resume==True):
         mode = input("enter mode(ap->append, rm->remove, se->find): ")
         uni = input("enter university name: ")
