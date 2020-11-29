@@ -32,7 +32,7 @@
 
     <br>
     <label for="listU" > Choose best the University to advertise to(recommended nearest):</label><br>
-    <input list="listU" onclick="universityDataList(uniDomainList);">
+    <input list="listU" onclick="universityDataList(uniDomainList);" th:field="*{universities}">
       <datalist id="listU">
           <!--dynamically allocated-->
       </datalist>

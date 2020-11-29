@@ -35,7 +35,7 @@ public class Post implements RowDDB
      * additionally if a posts data is copied it can be deleted and reposted changing the date-time
      * value
      * */
-    private Date date;
+    private final Date date;
 
     /**
      * This field allows certain people to see the post, whether or not they are in the group

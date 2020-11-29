@@ -1,0 +1,30 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Upload Post</title>
+    <script type = "text/javascript" src="/webservices.js"></script>
+
+</head>
+<body>
+
+<form action="post.php" method="post" enctype="multipart/form-data">
+    Create Post:
+    <p>
+        <input type="file" name="fileToUpload" id="fileToUpload" onselect="check_size();">
+    </p>
+    <p>
+        Caption:
+        <input type="text" name="caption" id="caption">
+        <br>
+        <br>
+        <input type="checkbox" name="privacy" value="privacy" id="privacy" onmouseover="displayPrivacyNotice();" onmouseout="removePrivacyNotice();">
+        <label>Private post</label> <div id="privacyDiv"></div>
+    </p>
+    <p>
+        <input type="submit" value="Upload Image" name="submit">
+    </p>
+</form>
+
+</body>
+</html>

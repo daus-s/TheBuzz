@@ -6,6 +6,8 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.model.*;
 import com.buzz.model.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +16,8 @@ import java.util.Set;
 
 public class DynamoDBUtility
 {
+    private static final Logger logger = LogManager.getLogger(DynamoDBUtility.class);
+
     private static AmazonDynamoDB dynamoDB = AmazonDynamoDBClientBuilder.standard().withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration("http://localhost:8000", "us-west-2")).build();
 
     //Table names
@@ -49,22 +53,21 @@ public class DynamoDBUtility
         //item_values.put();
         //System.out.println(item_values);
 
-
+        //System.out.printf("accessing %s table, ", row.getTableName());
         try
         {
             dynamoDB.putItem(row.getTableName(), item_values);
         }
         catch (ResourceNotFoundException e)
         {
-            System.err.format("Error: The table \"%s\" can't be found.\n", row.getTableName());
-            System.err.println("Be sure that it exists and that you've typed its name correctly!");
+            logger.debug("Error: The table " +row.getTableName()+ " can't be found.\n");
             e.printStackTrace();
             return false;
         }
         catch (AmazonServiceException e)
         {
             e.printStackTrace();
-            System.err.printf("problem discovered when putting \"%s\" into ddb\n", row.getKeyValue());
+            logger.debug("problem discovered when putting " + row.getKeyValue() + " into ddb\n");
             return false;
         }
         return true;

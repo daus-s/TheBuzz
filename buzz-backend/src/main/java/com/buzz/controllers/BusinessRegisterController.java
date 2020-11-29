@@ -7,6 +7,8 @@ import com.buzz.model.Email;
 import com.buzz.model.University;
 import com.buzz.util.DynamoDBUtility;
 import com.buzz.util.EmailSender;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class BusinessRegisterController
 {
+    private static final Logger logger = LogManager.getLogger(BusinessRegisterController.class);
+
     @Value("${BCRYPT_SALT}")
     String salt;
 

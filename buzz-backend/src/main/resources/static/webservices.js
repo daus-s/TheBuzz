@@ -102,7 +102,6 @@ function universityDataList(obj)
     document.getElementById("listU").innerHTML = "";
     list.forEach(makeDataListOption);
 
-
 }
 
 function makeDataListOption(str, index)
@@ -112,7 +111,17 @@ function makeDataListOption(str, index)
 
 function toFeedObj(str, index)
 {
-    document.body.innerHTML += "<a href=page/"+ str.publisher + ">" + str.publisher + "</a><brr>";
+    document.body.innerHTML += "<a href=/page/"+ str.publisher + ">" + str.publisher + "</a><brr>";
     document.body.innerHTML += "<img src=\"" + str.imageLocation + "\" alt=\"" + str.caption + "\"><br>";
-    document.body.innerHTML += str.caption + "<br>";
+    document.body.innerHTML += str.caption + "<br><br>";
+}
+
+function displayPrivacyNotice()
+{
+    document.getElementById("privacyDiv").innerHTML = "\"private\" posts will only be able to be seen by your accounts followers".fontcolor("purple");
+}
+
+function removePrivacyNotice()
+{
+    document.getElementById("privacyDiv").innerHTML = "";
 }

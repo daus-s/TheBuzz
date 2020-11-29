@@ -5,6 +5,8 @@ import com.buzz.model.Credential;
 import com.buzz.model.Email;
 import com.buzz.model.University;
 import com.buzz.util.DynamoDBUtility;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -21,6 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class LoginController
 {
+    private static final Logger logger = LogManager.getLogger(LoginController.class);
+
     @Value("${BCRYPT_SALT}")
     String salt;
 

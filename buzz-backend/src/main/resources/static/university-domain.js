@@ -7,4 +7,6 @@ var uniDomainList =
 ,{"name":"Chapman University","domain":"chapman.edu"}
 ,{"name":"Gonzaga University","domain":"gonzaga.edu"}
 
+,{"name":"New York University","domain":"nyu.edu"}
+
 ]}

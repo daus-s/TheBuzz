@@ -203,6 +203,44 @@ import java.util.Map;
             return posts.add(p);
         }
 
+        public Business()
+        {
+            //defaults?
+
+        }
+
+        public Business(String displayName, String email, String website, String address, String hashedPwd1, String hashedPwd2, String phoneNumber, String university, char type, String id, String logoIML)
+        {
+            this.displayName = displayName;
+            this.email = email;
+            this.website = website;
+            this.address = address;
+            this.hashedPwd1 = hashedPwd1;
+            this.hashedPwd2 = hashedPwd2;
+            this.phoneNumber = phoneNumber;
+            this.universities = new ArrayList<String>();
+            this.universities.add(university);
+            this.type = type;
+            this.id = id;
+            this.logoIML = logoIML;
+
+        }
+
+        public Business(String displayName, String email, String website, String address, String hashedPwd1, String hashedPwd2, String phoneNumber, String university, char type, String id)
+        {
+            this.displayName = displayName;
+            this.email = email;
+            this.website = website;
+            this.address = address;
+            this.hashedPwd1 = hashedPwd1;
+            this.hashedPwd2 = hashedPwd2;
+            this.phoneNumber = phoneNumber;
+            this.universities = new ArrayList<String>();
+            this.universities.add(university);
+            this.type = type;
+            this.id = id;
+
+        }
 
         public Business(String displayName, String email, String website)
         {
