@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class TextUtility
 {
@@ -39,4 +40,18 @@ public class TextUtility
         }
         return given;
     }
+
+    public static String extFromType(String type)
+    {
+        if (type.equals("image/png"))
+        {
+            return ".png";
+        }
+        if (type.equals("image/jpeg"))
+        {
+            return ".jpg";
+        }
+        else return ".txt";
+    }
+
 }

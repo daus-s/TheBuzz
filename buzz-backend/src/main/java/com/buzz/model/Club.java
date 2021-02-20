@@ -1,31 +1,22 @@
 package com.buzz.model;
 
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.buzz.util.TextUtility;
-import org.attoparser.util.TextUtil;
 
-import javax.xml.soap.Text;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 
-public class Club extends GroupFactory implements Group, RowDDB
+public class Club extends User implements Group, RowDDB
 {
-    private String displayName;
-    private String email;
-    private ArrayList<String> followers;
-    private ArrayList<Post> posts;
-    private String id;
-    private String website;
-    private String logoIML;
+    protected String displayName;
+    protected ArrayList<String> followers = new ArrayList<String>();
+    protected ArrayList<String> posts = new ArrayList<String>();
+    protected String website;
+    protected String logoIML = "default.png";
 
-    private boolean uniApproved;
+    protected boolean uniApproved;
 
-    /**
-     * This field is the University to which the group is affiliated. The University must approve of the
-     * group in order for the group to create posts .
-     */
-    private University affiliation;
-
+    protected String affiliation;
 
     /**
      * The email must be affiliated with the university
@@ -34,7 +25,6 @@ public class Club extends GroupFactory implements Group, RowDDB
     {
         this.displayName = displayName;
         this.email = email;
-        this.id = TextUtility.removeSpaces(displayName) + email.substring(email.indexOf("@"));
     }
 
     public boolean createPost(Post p, boolean privacy) {
@@ -43,19 +33,11 @@ public class Club extends GroupFactory implements Group, RowDDB
 
         if (uniApproved)
         {
-            return posts.add(p);
+            return posts.add(p.getId());
         }
         else return false;
     }
 
-    public String getId()
-    {
-        return id;
-    }
-    public void setId(String id)
-    {
-        this.id = id;
-    }
 
     public String getDisplayName()
     {
@@ -84,11 +66,11 @@ public class Club extends GroupFactory implements Group, RowDDB
         this.followers = l;
     }
 
-    public ArrayList<Post> getPosts()
+    public ArrayList<String> getPosts()
     {
         return this.posts;
     }
-    public void setPosts(ArrayList<Post> p)
+    public void setPosts(ArrayList<String> p)
     {
         this.posts = p;
     }
@@ -120,13 +102,16 @@ public class Club extends GroupFactory implements Group, RowDDB
         return followers.remove(a.getEmail());
     }
 
-    public University getAffiliation()
+    @Override
+    public boolean createPost(Post p)
     {
-        return affiliation;
+        return this.posts.add(p.getId());
     }
-    public void setAffiliation(University affiliation)
+
+    @Override
+    public boolean deletePost(Post p)
     {
-        this.affiliation = affiliation;
+        return this.posts.remove(p.getId());
     }
 
     public boolean isUniApproved()
@@ -148,25 +133,59 @@ public class Club extends GroupFactory implements Group, RowDDB
     @Override
     public void loadModel(Map<String, AttributeValue> map)
     {
-
+        if (map != null)
+        {
+            super.loadModel(map);
+            Set<String> keys = map.keySet();
+            this.setEmail(map.get("email").getS());
+            this.setUniApproved(map.get("uniApproved").getS().contains("true"));
+            this.setPwd(map.get("pwd").getS());
+            this.setAffiliation(map.get("affiliation").getS());
+            this.setLogoIML(map.get("logoIML").getS());
+            this.setWebsite(map.get("website").getS());
+            this.setDisplayName(map.get("displayName").getS());
+        }
+        else
+        {
+            System.out.format("No item found with the key %s!\n", email);
+        }
     }
 
     @Override
     public Map<String, AttributeValue> getModelAttributes()
     {
-        return null;
+        Map<String, AttributeValue> itemValues =  super.getModelAttributes();
+        itemValues.put("displayName", new AttributeValue(this.displayName));
+        if (this.followers.size()>0)
+            itemValues.put("followers", new AttributeValue(this.followers));
+        if (this.posts.size()>0)
+            itemValues.put("posts", new AttributeValue(this.posts.toString()));
+        itemValues.put("website", new AttributeValue(this.website));
+        itemValues.put("logoIML", new AttributeValue(this.logoIML));
+        itemValues.put("affiliation", new AttributeValue(this.affiliation));
+        itemValues.put("uniApproved", new AttributeValue(this.uniApproved + ""));
+        return itemValues;
     }
 
     @Override
     public String getKey()
     {
-        return "id";
+        return "email";
     }
     @Override
     public String getKeyValue()
     {
-        return this.id;
+        return this.email;
     }
 
 
+    public String getAffiliation()
+    {
+        return this.affiliation;
+    }
+
+    public void setAffiliation(String affiliation)
+    {
+        this.affiliation = affiliation;
+    }
 }

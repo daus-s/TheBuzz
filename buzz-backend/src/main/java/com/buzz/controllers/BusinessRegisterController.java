@@ -1,10 +1,7 @@
 package com.buzz.controllers;
 
 import com.amazonaws.services.dynamodbv2.xspec.B;
-import com.buzz.model.Account;
-import com.buzz.model.Business;
-import com.buzz.model.Email;
-import com.buzz.model.University;
+import com.buzz.model.*;
 import com.buzz.util.DynamoDBUtility;
 import com.buzz.util.EmailSender;
 import org.apache.logging.log4j.LogManager;
@@ -38,17 +35,17 @@ public class BusinessRegisterController
     }
 
     @PostMapping("/creategroup/business")
-    public String businessRegisterSubmit(@ModelAttribute Business business)
+    public String businessRegisterSubmit(@ModelAttribute BusinessRegister br)
     {
-        String pwd1 = BCrypt.hashpw(business.getHashedPwd1(),salt);
-        String pwd2 = BCrypt.hashpw(business.getHashedPwd2(), salt);
+        String pwd1 = BCrypt.hashpw(br.getPwd(),salt);
+        String pwd2 = BCrypt.hashpw(br.getConfirmHashedPwd(),salt);
 
-        business.setHashedPwd1(pwd1);
-        business.setHashedPwd2(pwd2);
+        br.setPwd(pwd1);
+        br.setConfirmHashedPwd(pwd2);
 
-        DynamoDBUtility.put(business);
-        Email email = new Email(business.getEmail(), "src/main/resources/emails/verification.txt");
-        sender.send(email, new Account(business.getDisplayName(),"", business.getEmail()));
+        DynamoDBUtility.put(br);
+        Email email = new Email(br.getEmail(), "src/main/resources/emails/verification.txt");
+        sender.send(email, new Account(br.getDisplayName(),"", br.getEmail()));
 
         return "confirm-phone-number";
     }

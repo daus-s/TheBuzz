@@ -45,10 +45,10 @@ public class RegisterController
     @PostMapping("/register")
     public String registerSubmit(@ModelAttribute AccountRegister account, HttpServletResponse response)
     {
-        String pwd = BCrypt.hashpw(account.getHashedPassword(), salt);
+        String pwd = BCrypt.hashpw(account.getPwd(), salt);
         Account written = new Account(account.getFirstName(), account.getLastName(), account.getEmail());
 
-        written.setHashedPassword(pwd);
+        written.setPwd(pwd);
         University u = new University("","", written.getCurrentSchoolID());
         DynamoDBUtility.get(u);
         written.follow(u);

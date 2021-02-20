@@ -2,6 +2,7 @@ package com.buzz.controllers;
 
 import com.amazonaws.services.dynamodbv2.xspec.S;
 import com.buzz.model.University;
+import com.buzz.model.UniversityRegister;
 import com.buzz.util.DynamoDBUtility;
 import com.buzz.util.TextUtility;
 import org.mindrot.jbcrypt.BCrypt;
@@ -32,15 +33,15 @@ public class UniversityRegisterController
     }
 
     @PostMapping
-    public String postRegister(University u, HttpServletResponse response)
+    public String postRegister(UniversityRegister ur, HttpServletResponse response)
     {
-        String kvp = ",{\"name\":\"" + u.getDisplayName() + ",\"domain\":\"" + u.getDomain() + "\"}\n";
+        String kvp = ",{\"name\":\"" + ur.getDisplayName() + ",\"domain\":\"" + ur.getDomain() + "\"}\n";
         File file = new File("../resources/static/university-domain.js");
         try
         {
             String fileString = TextUtility.readFileAsString("../resources/static/university-domain.js");
             FileWriter writer = new FileWriter("../resources/static/university-domain.js", false);
-            if (fileString.contains(u.getDomain()) || fileString.contains(u.getDisplayName()))
+            if (fileString.contains(ur.getDomain()) || fileString.contains(ur.getDisplayName()))
             {
                 System.out.println("already exists! please ensure you are not recreating an account.");
                 return "account-already-exists";
@@ -58,22 +59,22 @@ public class UniversityRegisterController
             System.out.println("could not access \"university-domain.js\" in \"resources/static/\"");
         }
 
-        Cookie c1 = new Cookie("emailName", u.getEmail());
-        Cookie c2 = new Cookie("firstName", TextUtility.removeSpaces(u.getDisplayName())); //TODO: change to .getPrefferedName()/.getNickname();
+        Cookie c1 = new Cookie("emailName", ur.getEmail());
+        Cookie c2 = new Cookie("firstName", TextUtility.removeSpaces(ur.getDisplayName())); //TODO: change to .getPrefferedName()/.getNickname();
         response.addCookie(c1);
         response.addCookie(c2);
 
-        String p1 = u.getHashedPwd1();
-        String p2 = u.getHashedPwd2();
+        String p1 = ur.getPwd();
+        String p2 = ur.getConfirmHashedPwd();
 
         p1 = BCrypt.hashpw(p1, salt);
-        p2 = BCrypt.hashpw(p1, salt);
+        p2 = BCrypt.hashpw(p2, salt);
 
-        u.setHashedPwd1(p1);
-        u.setHashedPwd2(p2);
+        ur.setPwd(p1);
+        ur.setConfirmHashedPwd(p2);
 
+        University u = ur;
         DynamoDBUtility.put(u);
-
 
         return "confirm-phone-number";
     }

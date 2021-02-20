@@ -11,13 +11,11 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
@@ -44,17 +42,21 @@ public class LoginController
         Account account = new Account("", "", c.getUsername());
         DynamoDBUtility.get(account);
 
-        String hash = account.getHashedPassword();
+        String hash = account.getPwd();
 
         String inputHashed = BCrypt.hashpw(c.getPassword(), salt);
 
         if (hash.equals(inputHashed))
         {
             //put session information
-            Cookie cookie = new Cookie("loginStatus", "logged-in");
-            //cookie.setSecure(true);
-            cookie.setMaxAge(604800);
-            response.addCookie(cookie);
+            Cookie loginStatus = new Cookie("loginStatus", "logged-in");
+            loginStatus.setSecure(true);
+            loginStatus.setMaxAge(604800);
+            response.addCookie(loginStatus);
+            Cookie firstName = new Cookie("firstName", account.getFirstName());
+            response.addCookie(firstName);
+            Cookie type = new Cookie("type", account.getType()+"");
+            response.addCookie(type);
             return "home";
         }
         else return "login";

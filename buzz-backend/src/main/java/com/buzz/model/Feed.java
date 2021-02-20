@@ -1,14 +1,12 @@
 package com.buzz.model;
 
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.services.dynamodbv2.xspec.B;
 import com.buzz.util.DynamoDBUtility;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class Feed implements RowDDB
+public class Feed
 {
     private ArrayList<Post> feed = new ArrayList<Post>();
 
@@ -52,8 +50,13 @@ public class Feed implements RowDDB
             ArrayList<Club> clubs = university.getClubs();
             for (Club club : clubs)
             {
-                ArrayList<Post> clubsPost = club.getPosts();
-                feed.addAll(clubsPost);
+                ArrayList<String> clubsPost = club.getPosts();
+                for (String id: clubsPost)
+                {
+                    Post p = new Post(id);
+                    DynamoDBUtility.get(p);
+                    feed.add(p);
+                }
             }
         }
         //following
@@ -65,36 +68,40 @@ public class Feed implements RowDDB
         for (String id: followingIDs)
         {
 
-            GroupFactory instance = new GroupFactory();
-            if (instance.getType()=='u')
+            User entrant = new User();
+            entrant.setEmail(id);
+            DynamoDBUtility.get(entrant);
+            if (entrant.getType()=='u')
             {
-                University u = new University("", "", "");
+                University u = new University("", entrant.email, "");
                 DynamoDBUtility.get(u);
                 following.add(u);
             }
-            if (instance.getType()=='c')
+            if (entrant.getType()=='c')
             {
-                Club c = new Club("", "");
+                Club c = new Club("", entrant.email);
                 DynamoDBUtility.get(c);
                 following.add(c);
             }
-            if (instance.getType()=='b')
+            if (entrant.getType()=='b')
             {
-                Business b = new Business("", "", "");
+                Business b = new Business("", entrant.email, "");
                 DynamoDBUtility.get(b);
                 following.add(b);
             }
         }
 
 
-        for (int i = 0; i < following.size(); i++)
+        for (Group group : following)
         {
-            if (!following.get(i).equals(this.university))
+            if (!group.equals(this.university))
             {
-                ArrayList<Post> groupPosts = following.get(i).getPosts();
-                for (int j = 0; j < groupPosts.size(); j++)
+                ArrayList<String> groupPosts = group.getPosts();
+                for (String groupPost : groupPosts)
                 {
-                    feed.add(groupPosts.get(j));
+                    Post p = new Post(groupPost);
+                    DynamoDBUtility.get(p);
+                    feed.add(p);
                 }
 
             }
@@ -104,8 +111,10 @@ public class Feed implements RowDDB
 
         for (Business b : university.getBusinesses())
         {
-            for (Post p: b.getPosts())
+            for (String iml: b.getPosts())
             {
+                Post p = new Post(iml);
+                DynamoDBUtility.get(p);
                 feed.add(p);
             }
         }
@@ -113,33 +122,5 @@ public class Feed implements RowDDB
         return feed;
     }
 
-    @Override
-    public String getTableName()
-    {
-        return "feed-table";
-    }
 
-    @Override
-    public void loadModel(Map<String, AttributeValue> map)
-    {
-
-    }
-
-    @Override
-    public Map<String, AttributeValue> getModelAttributes()
-    {
-        return null;
-    }
-
-    @Override
-    public String getKey()
-    {
-        return "account.email";
-    }
-
-    @Override
-    public String getKeyValue()
-    {
-        return this.account.getEmail();
-    }
 }

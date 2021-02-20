@@ -8,7 +8,7 @@ import com.buzz.util.TextUtility;
 import java.io.IOException;
 import java.util.*;
 
-public class Account extends Item implements RowDDB
+public class Account extends User implements RowDDB
 {
     /**
      * first name, preferred name, not necessary to be legal name as no
@@ -23,20 +23,7 @@ public class Account extends Item implements RowDDB
      */
     protected String lastName;                                            //required
 
-    /**
-     * email, used as key in the account database. MUST be unique and is
-     * required in the constructor as well. the domain is used to check
-     * student status
-     */
-    protected String email;                                               //required
 
-    /**
-     * stored using B-crypt and is passed in through the /register page
-     * non unique
-     *
-     * requirements, 8+ chars
-     */
-    protected String hashedPassword;                                      //required
 
     /**
      * verfied; determines if the account can perform actions at all\
@@ -84,15 +71,6 @@ public class Account extends Item implements RowDDB
      */
     protected int ttl;                                                    //constant-86400s -24 hrs
 
-    //email
-    public String getEmail()
-    {
-        return email;
-    }
-    public void setEmail(String email)
-    {
-        this.email = email;
-    }
     //last name
     public String getLastName()
     {
@@ -155,12 +133,6 @@ public class Account extends Item implements RowDDB
     }
 
     //not password
-    public String getHashedPassword() {
-        return hashedPassword;
-    }
-    public void setHashedPassword(String hashedPassword) {
-        this.hashedPassword = hashedPassword;
-    }
 
     //ttl NUMBER value
     public int getTtl()
@@ -187,7 +159,7 @@ public class Account extends Item implements RowDDB
         this.firstName=firstName;
         this.lastName=lastName;
         this.email=email;
-        this.hashedPassword = "defaultPassword1";
+        this.pwd = "defaultPassword1";
         this.currentSchoolID = email.substring(email.indexOf("@")+1);
         this.ttl = ((int) (System.currentTimeMillis()/1000))+86400;
         this.verifyCode = this.createVerifyCode();
@@ -255,7 +227,7 @@ public class Account extends Item implements RowDDB
      */
     public String toString()
     {
-        return "firstName:" + this.firstName + "\nlastName:" + this.lastName + "\nemail:" + this.email + "\nverified:" + this.verified + "\nstudent:" + this.student + "\nfollowingIDs:" + followingIDs.toString() + "\ncurrentSchoolID:" + this.currentSchoolID + "\nhashedPWD:" + this.hashedPassword + "\nverification code:" + this.verifyCode + "\nttl:" + this.ttl;
+        return "firstName:" + this.firstName + "\nlastName:" + this.lastName + "\nemail:" + this.email + "\nverified:" + this.verified + "\nstudent:" + this.student + "\nfollowingIDs:" + followingIDs.toString() + "\ncurrentSchoolID:" + this.currentSchoolID + "\nhashedPWD:" + this.pwd + "\nverification code:" + this.verifyCode + "\nttl:" + this.ttl;
     }
 
 
@@ -301,7 +273,7 @@ public class Account extends Item implements RowDDB
             this.setLastName(map.get("lastName").getS());
             this.setVerified(map.get("verified").getS().contains("true"));
             this.setStudent(map.get("student").getS().contains("true"));
-            this.setHashedPassword(map.get("hashedPassword").getS());
+            this.setPwd(map.get("hashedPassword").getS());
             this.setCurrentSchoolID(map.get("currentSchoolID").getS());
             this.setTtl(Integer.parseInt(map.get("ttl").getN()));
             this.setVerifyCode(map.get("verifyCode").getS());
@@ -320,10 +292,13 @@ public class Account extends Item implements RowDDB
         itemValues.put("email", new AttributeValue(this.getEmail()));
         itemValues.put("firstName", new AttributeValue(this.firstName));
         itemValues.put("lastName", new AttributeValue(this.lastName));
-        itemValues.put("hashedPassword", new AttributeValue(this.hashedPassword));
+        itemValues.put("hashedPassword", new AttributeValue(this.pwd));
         itemValues.put("verified", new AttributeValue(this.verified+""));
         itemValues.put("student", new AttributeValue(this.student+""));
-        itemValues.put("followingIDs", new AttributeValue(this.followingIDs));
+        if (followingIDs.size()!=0)
+        {
+            itemValues.put("followingIDs", new AttributeValue(this.followingIDs));
+        }
         itemValues.put("currentSchoolID", new AttributeValue(this.currentSchoolID));
         itemValues.put("verifyCode", new AttributeValue(this.verifyCode));
         AttributeValue av = new AttributeValue();

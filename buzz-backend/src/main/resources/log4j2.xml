@@ -9,6 +9,12 @@
         <Logger name="com.mkyong" level="debug" additivity="false">
             <AppenderRef ref="LogToConsole"/>
         </Logger>
+        <Logger name="org.springframework" level="trace">
+            <AppenderRef ref="LogToConsole"/>
+        </Logger>
+        <Logger name="org.thymeleaf" level="trace">
+            <AppenderRef ref="LogToConsole"/>
+        </Logger>
         <Root level="error">
             <AppenderRef ref="LogToConsole"/>
         </Root>

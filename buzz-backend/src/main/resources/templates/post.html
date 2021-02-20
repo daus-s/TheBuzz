@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
         "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <title>Upload Post</title>
     <script type = "text/javascript" src="/webservices.js"></script>
@@ -8,18 +8,15 @@
 </head>
 <body>
 
-<form action="post.php" method="post" enctype="multipart/form-data">
+<form name="postwrapper" th:action="@{/upload}" th:object="${postwrapper}" method="post" enctype="multipart/form-data">
     Create Post:
     <p>
-        <input type="file" name="fileToUpload" id="fileToUpload" onselect="check_size();">
+        <input type="file" name="file" class="form-control-file">
     </p>
     <p>
         Caption:
-        <input type="text" name="caption" id="caption">
-        <br>
-        <br>
-        <input type="checkbox" name="privacy" value="privacy" id="privacy" onmouseover="displayPrivacyNotice();" onmouseout="removePrivacyNotice();">
-        <label>Private post</label> <div id="privacyDiv"></div>
+        <input type="text" th:field="*{caption}" name="caption" id="caption">
+
     </p>
     <p>
         <input type="submit" value="Upload Image" name="submit">
@@ -27,4 +24,18 @@
 </form>
 
 </body>
+
+<script>
+    function checkPrivacy()
+    {
+        if (document.postwrapper.privacy.checked)
+        {
+            document.postwrapper.htf1 = "true"
+        }
+        else
+        {
+            document.postwrapper.htf1 = "false"
+        }
+    }
+</script>
 </html>

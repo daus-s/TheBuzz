@@ -13,8 +13,8 @@ public interface Group
     public ArrayList<String> getFollowers();
     public void setFollowers(ArrayList<String> l);
 
-    public ArrayList<Post> getPosts();
-    public void setPosts(ArrayList<Post> p);
+    public ArrayList<String> getPosts();
+    public void setPosts(ArrayList<String> id);
 
     public String getWebsite();
     public void setWebsite(String w);
@@ -25,5 +25,6 @@ public interface Group
     public boolean addFollower(Account a);
     public boolean removeFollower(Account a);
 
-
+    public boolean createPost(Post p);
+    public boolean deletePost(Post p);
 }

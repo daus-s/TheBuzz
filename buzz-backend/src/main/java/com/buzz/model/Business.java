@@ -1,7 +1,6 @@
 package com.buzz.model;
 
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.buzz.util.DynamoDBUtility;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +13,7 @@ import java.util.Map;
      * The relationship between an Account, and a Group is "has-some"  i.e. the Group has some Accounts following
      * Groups can create posts that go to the followers
      */
-    public class Business extends GroupFactory implements RowDDB, Group
+    public class Business extends User implements RowDDB, Group
     {
         /**
          * The display name is the name that appears with the post and is linked to the
@@ -22,12 +21,7 @@ import java.util.Map;
          * rather the id field generated on this field.
          */
         private String displayName = "group"; //defaults
-        /**
-         * The email must be unique(it is the only existence of the email in the database,
-         * across all tables, both account and group profiles) and is used as the key in
-         * the dynamoDB for Groups.
-         */
-        private String email = "a@b.com"; //defaults
+
 
         /**
          * The follower Arraylist(AL) contains all accounts that follow the account.
@@ -42,7 +36,7 @@ import java.util.Map;
          * Represented on the Groups page and displayed there. The caption and image are the only important
          * parts when being represented on the groups page.
          * */
-        private ArrayList<Post> posts = new ArrayList<Post>();
+        private ArrayList<String> posts = new ArrayList<String>();
 
         /**
          * Website that is displayed on the profile of the group. Non-unique requirement, however, it often
@@ -66,22 +60,12 @@ import java.util.Map;
         /**
          *
          */
-        private String hashedPwd1;
-        /**
-         *
-         */
-        private String hashedPwd2;
-
-
-        /**
-         *
-         */
         private String phoneNumber;
 
         /**
          *
          */
-        private ArrayList<String> universities;
+        private ArrayList<String> universities = new ArrayList<String>();
 
 
         //follower & post accessors
@@ -96,11 +80,11 @@ import java.util.Map;
 
 
         //post accessors and mutators
-        public ArrayList<Post> getPosts()
+        public ArrayList<String> getPosts()
         {
             return posts;
         }
-        public void setPosts(ArrayList<Post> p)
+        public void setPosts(ArrayList<String> p)
         {
             this.posts = p;
         }
@@ -179,15 +163,14 @@ import java.util.Map;
         }
 
         /**
-         * @param p
+         * @param id
          * @return whether the post was found and removed
-         * The post is removed from the account and the data of the post should be
-         * deleted from the S3
+         * The post is removed from the account and the data of the post will not be
+         * deleted from the s3. only mods have this power. NUKE BUTTON
          */
-        public boolean deletePost(Post p)
+        public boolean deletePost(String id)
         {
-            //TODO: delete post data from s3
-            return posts.remove(p);
+            return posts.remove(id);
         }
 
         /**
@@ -199,14 +182,15 @@ import java.util.Map;
          */
         public boolean createPost(Post p)
         {
-            //TODO: add data to s3
-            return posts.add(p);
+
+            return posts.add(p.getId());
+
         }
 
-        public Business()
+        @Override
+        public boolean deletePost(Post p)
         {
-            //defaults?
-
+            return posts.remove(p.getId());
         }
 
         public Business(String displayName, String email, String website, String address, String hashedPwd1, String hashedPwd2, String phoneNumber, String university, char type, String id, String logoIML)
@@ -215,13 +199,10 @@ import java.util.Map;
             this.email = email;
             this.website = website;
             this.address = address;
-            this.hashedPwd1 = hashedPwd1;
-            this.hashedPwd2 = hashedPwd2;
             this.phoneNumber = phoneNumber;
             this.universities = new ArrayList<String>();
             this.universities.add(university);
             this.type = type;
-            this.id = id;
             this.logoIML = logoIML;
 
         }
@@ -232,13 +213,10 @@ import java.util.Map;
             this.email = email;
             this.website = website;
             this.address = address;
-            this.hashedPwd1 = hashedPwd1;
-            this.hashedPwd2 = hashedPwd2;
             this.phoneNumber = phoneNumber;
             this.universities = new ArrayList<String>();
             this.universities.add(university);
             this.type = type;
-            this.id = id;
 
         }
 
@@ -256,6 +234,11 @@ import java.util.Map;
             this.email = email;
         }
 
+        public Business(String email)
+        {
+            this.email = email;
+        }
+
 
         @Override
         public String getTableName()
@@ -266,25 +249,14 @@ import java.util.Map;
         @Override
         public void loadModel(Map<String, AttributeValue> map)
         {
-            this.id = map.get("id").getS();
             this.type = 'b';
             this.email = map.get("email").getS();
             this.displayName = map.get("displayName").getS();
             this.followers = (ArrayList<String>) map.get("followers").getSS();
             ArrayList<String> names = (ArrayList<String>) map.get("posts").getSS();
-            if (names!=null)
-            {
-                for (String s: names)
-                {
-                    Post p = new Post(s,this);
-                    DynamoDBUtility.get(p);
-                    this.posts.add(p);
-                }
-            }
             this.website = map.get("website").getS();
             this.logoIML = map.get("logoIML").getS();
-            this.hashedPwd1 = map.get("hashedPwd").getS();
-            this.hashedPwd2 = hashedPwd1;
+            this.pwd = map.get("pwd").getS();
             this.universities = (ArrayList<String>) map.get("universities").getSS();
             this.phoneNumber = map.get("phoneNumber").getS();
             this.address = map.get("address").getS();
@@ -296,15 +268,24 @@ import java.util.Map;
         {
             Map<String, AttributeValue> itemValues = new HashMap<String, AttributeValue>();
 
-            itemValues.put("id", new AttributeValue(this.id));
             itemValues.put("email", new AttributeValue(this.email));
             itemValues.put("displayName", new AttributeValue(this.displayName));
-            itemValues.put("followers", new AttributeValue(this.followers));
-            itemValues.put("posts", new AttributeValue());//TODO: figure way to make string list
+
+            if (followers.size() > 0)
+            {
+                itemValues.put("followers", new AttributeValue(this.followers));
+            }
+            if (posts.size() > 0)
+            {
+                itemValues.put("posts", new AttributeValue());
+            }
+            if (universities.size() > 0)
+            {
+                itemValues.put("universities", new AttributeValue(this.universities));
+            }
             itemValues.put("website", new AttributeValue(this.website));
             itemValues.put("logoIML", new AttributeValue(this.logoIML));
-            itemValues.put("hashedPwd", new AttributeValue(this.hashedPwd1));
-            itemValues.put("universities", new AttributeValue(this.universities));
+            itemValues.put("pwd", new AttributeValue(this.pwd));
             itemValues.put("phoneNumber", new AttributeValue(this.phoneNumber));
             itemValues.put("address", new AttributeValue(this.address));
 
@@ -315,13 +296,13 @@ import java.util.Map;
         @Override
         public String getKey()
         {
-            return "id";
+            return "email";
         }
 
         @Override
         public String getKeyValue()
         {
-            return id;
+            return email;
         }
 
 
@@ -333,26 +314,6 @@ import java.util.Map;
         public void setPhoneNumber(String phoneNumber)
         {
             this.phoneNumber = phoneNumber;
-        }
-
-        public String getHashedPwd2()
-        {
-            return hashedPwd2;
-        }
-
-        public void setHashedPwd2(String hashedPwd2)
-        {
-            this.hashedPwd2 = hashedPwd2;
-        }
-
-        public String getHashedPwd1()
-        {
-            return hashedPwd1;
-        }
-
-        public void setHashedPwd1(String hashedPwd1)
-        {
-            this.hashedPwd1 = hashedPwd1;
         }
 
         public ArrayList<String> getUniversities()

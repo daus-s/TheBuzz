@@ -105,6 +105,12 @@ public class Post implements RowDDB
         this.id = id;
     }
 
+    public Post(String iml)
+    {
+        this.imageLocation = iml;
+        this.date = new Date();
+    }
+
     public Post(String imageLocation, Group publisher)
     {
         this.date = new Date();
@@ -165,6 +171,6 @@ public class Post implements RowDDB
 
     public String toString()
     {
-        return "{" + "publisher:" + this.publisher + "\nimageLocation:" + this.imageLocation + "\ncaption:" + this.caption + "}";
+        return "{publisher:" + this.publisher + "\nimageLocation:" + this.imageLocation + "\ncaption:" + this.caption + "\ndate:" + this.date.toString() +"}";
     }
 }

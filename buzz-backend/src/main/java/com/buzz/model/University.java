@@ -4,11 +4,9 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.buzz.util.DynamoDBUtility;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
-public class University extends GroupFactory implements RowDDB, Group
+public class University extends User implements RowDDB, Group
 {
 
 
@@ -17,14 +15,8 @@ public class University extends GroupFactory implements RowDDB, Group
      * account. This does not need to be unique, however it often should, the key is not the email,
      * rather the id field generated on this field.
      */
-    private String displayName = "group"; //defaults
+    protected String displayName = "group"; //defaults
 
-    /**
-     * The email must be unique(it is the only existence of the email in the database,
-     * across all tables, both account and group profiles) and is used as the key in
-     * the dynamoDB for Groups.
-     */
-    private String email = "a@b.com"; //defaults
 
     /**
      * The follower Arraylist(AL) contains all accounts that follow the account.
@@ -33,25 +25,25 @@ public class University extends GroupFactory implements RowDDB, Group
      * following or un-following, the code must ensure the action is completed on both sides
      * with preference going to the Group if there is a discrepancy.
      */
-    private ArrayList<String> followers = new ArrayList<String>();
+    protected ArrayList<String> followers = new ArrayList<String>();
     /**
      * List of all post that have not been deleted or expired based on time-to-live(later version)
      * Represented on the Groups page and displayed there. The caption and image are the only important
      * parts when being represented on the groups page.
      * */
-    private ArrayList<Post> posts = new ArrayList<Post>();
+    protected ArrayList<String> posts = new ArrayList<String>();
 
     /**
      * Website that is displayed on the profile of the group. Non-unique requirement, however, it often
      * should be.
      */
-    private String website = "thebuzz.com";
+    protected String website = "thebuzz.com";
 
     /**
      * This is the address of the logo in the S3 that is used as the universities "profile picture."
      * See mock rendering of app design to see image
      */
-    private String logoIML = "default.png";
+    protected String logoIML = "default.png";
 
 
     /**
@@ -60,23 +52,19 @@ public class University extends GroupFactory implements RowDDB, Group
      * There will be redundancy and when generating these, it may be possible to use DB a to
      * populate DB for example.
      */
-    private String domain;
+    protected String domain;
 
     /**
      * list of clubs affiliated with the university, these will require approval
      * facilitated by the university.
      * */
-    private ArrayList<Club> clubs = new ArrayList<Club>();
+    protected ArrayList<Club> clubs = new ArrayList<Club>();
 
 
     /**
      *
      */
-    private ArrayList<Business> businesses = new ArrayList<>();
-
-    private String hashedPwd1;
-    private String hashedPwd2;
-
+    protected ArrayList<Business> businesses = new ArrayList<>();
 
 
     public University(String displayName, String email, String domain)
@@ -105,11 +93,23 @@ public class University extends GroupFactory implements RowDDB, Group
             return followers.remove(r.getEmail());
     }
 
+    @Override
+    public boolean createPost(Post p)
+    {
+        return this.posts.add(p.getId());
+    }
+
+    @Override
+    public boolean deletePost(Post p)
+    {
+        return this.posts.remove(p.getId());
+    }
+
     public String getDomain()
     {
         return this.domain;
     }
-    public void setDomain()
+    public void setDomain(String domain)
     {
         this.domain = domain;
     }
@@ -132,6 +132,7 @@ public class University extends GroupFactory implements RowDDB, Group
     @Override
     public void loadModel(Map<String, AttributeValue> map)
     {
+        super.loadModel(map);
         this.email = map.get("email").getS();
         this.displayName = map.get("displayName").getS();
 
@@ -153,14 +154,14 @@ public class University extends GroupFactory implements RowDDB, Group
                 {
                     Post p = new Post(s, this);
                     DynamoDBUtility.get(p);
-                    this.posts.add(p);
+                    this.posts.add(p.getId());
                 }
             }
             this.domain = map.get("domain").getS();
         }
         else
         {
-            this.posts = new ArrayList<Post>();
+            this.posts = new ArrayList<String>();
         }
 
 
@@ -189,7 +190,7 @@ public class University extends GroupFactory implements RowDDB, Group
     @Override
     public Map<String, AttributeValue> getModelAttributes()
     {
-        Map<String, AttributeValue> itemValues = new HashMap<>();
+        Map<String, AttributeValue> itemValues = super.getModelAttributes();
         itemValues.put("email", new AttributeValue(this.email));
         itemValues.put("displayName", new AttributeValue(this.displayName));
         if (this.followers.size()>0)
@@ -258,7 +259,7 @@ public class University extends GroupFactory implements RowDDB, Group
     }
 
     @Override
-    public ArrayList<Post> getPosts()
+    public ArrayList<String> getPosts()
     {
 //        if (posts.size()==0)
 //        {
@@ -268,7 +269,7 @@ public class University extends GroupFactory implements RowDDB, Group
     }
 
     @Override
-    public void setPosts(ArrayList<Post> p)
+    public void setPosts(ArrayList<String> p)
     {
         this.posts = p;
     }
@@ -322,23 +323,5 @@ public class University extends GroupFactory implements RowDDB, Group
         return "domain: " + domain + "\ndisplayName: " + displayName + "\nemail: " + email + "followers: " + followers.toString() + "\nposts: " + posts.toString() + "\nwebsite: " + website + "\nlogoIML:" + logoIML;
     }
 
-    public String getHashedPwd1()
-    {
-        return hashedPwd1;
-    }
 
-    public void setHashedPwd1(String hashedPwd1)
-    {
-        this.hashedPwd1 = hashedPwd1;
-    }
-
-    public String getHashedPwd2()
-    {
-        return hashedPwd2;
-    }
-
-    public void setHashedPwd2(String hashedPwd2)
-    {
-        this.hashedPwd2 = hashedPwd2;
-    }
 }
