@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>The Buzz</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script type = "text/javascript" src="webservices.js"></script>
+
+</head>
+<body>
+<script>
+    let name = getCookie("firstName");
+    document.body.innerHTML = "<p>Hey, " + name + ", welcome to the buzz!</p>";
+</script>
+<a href="/register">Create an Account</a>
+<p></p>
+<a href="/explore">Find Colleges</a>
+<p></p>
+<a href="/feed">Feed</a>
+<p></p>
+<a href="/login">Login</a>
+<p></p>
+<a href="/profile">Profile</a>
+<p></p>
+<a href="/creategroup">Register Your Group</a>
+
+
+</body>
+</html>

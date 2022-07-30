@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Register your Account</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script type = "text/javascript" src="/webservices.js"></script>
+    <script type = "text/javascript" src="/university-domain.js"></script>
+
+</head>
+<body>
+<h1>Register Business</h1>
+<form name = "business-register" form action="#" th:action="@{/creategroup/business}" th:object="${business}" method="post">
+    <br>
+    Business Name: <input type="text" th:field="*{displayName}" />
+    <br>
+
+    <br>
+    Website: <input type="text" th:field="*{website}" />
+    <br>
+
+    <br>
+    Email: <input type="text" th:field="*{email}" />
+    <br>
+
+    <br>
+    Address: <input type="text" th:field="*{address}" />
+    <br>
+
+    <br>
+    Phone Number: <input type="text" th:field="*{phoneNumber}" />
+    <br>
+
+    <br>
+    <label for="listU" > Choose best the University to advertise to(recommended nearest):</label><br>
+    <input list="listU" onclick="universityDataList(uniDomainList);" th:field="*{universities}">
+      <datalist id="listU">
+          <!--dynamically allocated-->
+      </datalist>
+    <br>
+
+    <br>
+    Password: <input type = "password" th:field="*{hashedPwd1}" id="pwd1" name="pwd1" onkeyup="validPassword();"/> <span id='valid'></span>
+    <br>
+
+    <br>
+    Confirm Password: <input type="password" th:field="*{hashedPwd2}" id="pwd2"name="pwd2" onkeyup="validPassword();"> <span id='equal'></span>
+    <br>
+
+    <input type="submit" id="submit" value="Submit" disabled="true"/>
+
+
+</form>
+</body>
+</html>

@@ -1,0 +1,7 @@
+Hi --fName--,
+
+Please copy the number below and paste in the verify page to complete the setup of your BuzzU account.
+--code--
+
+Have a great day!
+-TheBuzz team

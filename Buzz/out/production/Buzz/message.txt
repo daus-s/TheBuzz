@@ -1,5 +1,0 @@
-Hi BuzzTeam, this is the first test of the SMTP, using javax.mail. This was hosted by smtp.cgrmtn-carmichaels.com but in the future will be hosted by amazon SES.
-This will become an automated system to verify student addresses and create accounts for prospective students.
-
-Thanks,
-Buzz Aldrin

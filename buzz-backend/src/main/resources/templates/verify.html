@@ -1,0 +1,13 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Verify Email</title>
+</head>
+<body>
+<form action="#" th:action="@{/verify}" th:object="${verify}" method="post">
+    <p>Code: <input type="text" th:field="*{string}"/></p>
+    <p><input type="submit" value="Submit" /></p>
+</form>
+</body>
+</html>
